@@ -28,14 +28,14 @@ ARG DISTRO_NAME=zookeeper-3.4.10
 RUN set -x \
     && apk add --no-cache --virtual .build-deps \
         gnupg \
-    && wget -q "http://www.apache.org/dist/zookeeper/$DISTRO_NAME/$DISTRO_NAME.tar.gz" \
-    && wget -q "http://www.apache.org/dist/zookeeper/$DISTRO_NAME/$DISTRO_NAME.tar.gz.asc" \
+    && wget "http://www.apache.org/dist/zookeeper/$DISTRO_NAME/$DISTRO_NAME.tar.gz" \
+    && wget "http://www.apache.org/dist/zookeeper/$DISTRO_NAME/$DISTRO_NAME.tar.gz.asc" \
     && export GNUPGHOME="$(mktemp -d)" \
     && gpg --keyserver ha.pool.sks-keyservers.net --recv-key "$GPG_KEY" \
     && gpg --batch --verify "$DISTRO_NAME.tar.gz.asc" "$DISTRO_NAME.tar.gz" \
     && tar -xzf "$DISTRO_NAME.tar.gz" \
     && mv "$DISTRO_NAME/conf/"* "$ZOO_CONF_DIR" \
-    && rm -r "$GNUPGHOME" "$DISTRO_NAME.tar.gz" "$DISTRO_NAME.tar.gz.asc" \
+    && rm -r ../"$DISTRO_NAME.tar.gz" ../"$DISTRO_NAME.tar.gz.asc" \
     && apk del .build-deps
 
 WORKDIR $DISTRO_NAME
@@ -45,6 +45,8 @@ EXPOSE $ZOO_PORT 2888 3888
 
 ENV PATH=$PATH:/$DISTRO_NAME/bin \
     ZOOCFGDIR=$ZOO_CONF_DIR
+
+# ADD zoo.cfg "$ZOO_CONF_DIR"
 
 COPY docker-entrypoint.sh /
 ENTRYPOINT ["/docker-entrypoint.sh"]
