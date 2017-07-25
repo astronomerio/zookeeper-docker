@@ -19,10 +19,9 @@ if [ ! -f "$ZOO_CONF_DIR/zoo.cfg" ]; then
     echo "tickTime=$ZOO_TICK_TIME" >> "$CONFIG"
     echo "initLimit=$ZOO_INIT_LIMIT" >> "$CONFIG"
     echo "syncLimit=$ZOO_SYNC_LIMIT" >> "$CONFIG"
-
-    for server in $ZOO_SERVERS; do
-        echo "$server" >> "$CONFIG"
-    done
+    echo "server.1=$ZOO_SERVER_1" >> "$CONFIG"
+    echo "server.2=$ZOO_SERVER_2" >> "$CONFIG"
+    echo "server.3=$ZOO_SERVER_3" >> "$CONFIG"
 fi
 
 # Write myid only if it doesn't exist
